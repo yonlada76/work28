@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Check-in</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet"> <!-- นำเข้าฟอนต์ Kanit -->
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif; /* กำหนดฟอนต์สำหรับเนื้อหา */
+            background-color: #f0f8ff; /* สีพื้นหลังที่นุ่มนวล */
+            margin: 0; /* ลบระยะขอบ */
+            padding: 20px; /* เพิ่มระยะภายใน */
+            color: #333; /* สีข้อความ */
+        }
+        h1 {
+            text-align: center; /* จัดกลางข้อความ */
+            color: #0056b3; /* สีน้ำเงินสำหรับหัวข้อ */
+            margin-bottom: 20px; /* ระยะห่างด้านล่าง */
+            font-size: 2.5em; /* ขนาดตัวอักษรที่ใหญ่ขึ้น */
+        }
+        .nav {
+            display: flex; /* ใช้ Flexbox สำหรับการจัดเรียงลิงก์ */
+            justify-content: center; /* จัดกลางลิงก์ */
+            gap: 20px; /* ระยะห่างระหว่างลิงก์ */
+            margin-bottom: 20px; /* ระยะห่างด้านล่าง */
+            list-style: none; /* ลบสัญลักษณ์ลิสต์ */
+            padding: 0; /* ลบระยะในของลิสต์ */
+            background-color: #0056b3; /* สีพื้นหลังของแถบเมนู */
+            border-radius: 5px; /* มุมที่โค้งมน */
+            padding: 20px; /* เพิ่มระยะภายใน */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* เงาให้ดูมีมิติ */
+        }
+        /* ลิงก์ในแถบนำทาง */
+        .nav-link {
+            text-decoration: none; /* ไม่ให้มีเส้นใต้ */
+            color: white; /* สีข้อความลิงก์ */
+            font-weight: 500; /* น้ำหนักตัวอักษร */
+            font-size: 1.1em; /* ขนาดตัวอักษร */
+            padding: 10px 15px; /* ระยะห่างรอบ ๆ ข้อความ */
+            border-radius: 10px; /* มุมที่โค้งมน */
+            transition: background-color 0.3s, transform 0.2s; /* เอฟเฟกต์เมื่อเปลี่ยนสี */
+        }
+        /* การโต้ตอบเมื่อลากเมาส์ผ่าน */
+        .nav-link:hover {
+            background-color: #003d80; /* สีพื้นหลังเมื่อเอาเมาส์ไปวาง */
+            color: #f0f8ff; /* เปลี่ยนสีข้อความเมื่อเอาเมาส์ไปวาง */
+            transform: translateY(-2px); /* ยกขึ้นเล็กน้อยเมื่อเอาเมาส์ไปวาง */
+        }
+        table {
+            width: 100%; /* ให้ตารางเต็มความกว้าง */
+            border-collapse: collapse; /* รวมเส้นขอบ */
+            margin: 20px 0; /* ระยะห่างด้านบนและล่าง */
+            background-color: #fff; /* สีพื้นหลังของตาราง */
+            border-radius: 8px; /* มุมที่โค้งมน */
+            overflow: hidden; /* ป้องกันการแสดงผลที่ไม่สวยงาม */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* เงาให้ดูมีมิติ */
+        }
+        th, td {
+            padding: 15px; /* ระยะห่างภายในเซลล์ */
+            text-align: left; /* จัดข้อความทางซ้าย */
+            border-bottom: 1px solid #ddd; /* เส้นขอบด้านล่างเซลล์ */
+            transition: background-color 0.3s; /* เอฟเฟกต์เมื่อเปลี่ยนสีพื้นหลัง */
+        }
+        th {
+            background-color: #007bff; /* สีน้ำเงินสำหรับหัวตาราง */
+            color: white; /* สีข้อความในหัวตาราง */
+            font-size: 1.2em; /* ขนาดตัวอักษรที่ใหญ่ขึ้นสำหรับหัวตาราง */
+        }
+        tr:hover {
+            background-color: #f1f1f1; /* สีพื้นหลังที่เปลี่ยนเมื่อเมาส์อยู่เหนือแถว */
+        }
+        button {
+            padding: 12px 20px; /* ระยะห่างภายในปุ่ม */
+            background-color: #28a745; /* สีเขียวสำหรับปุ่ม */
+            color: white; /* สีข้อความในปุ่ม */
+            border: none; /* ไม่มีเส้นขอบ */
+            border-radius: 5px; /* มุมที่โค้งมน */
+            cursor: pointer; /* แสดงว่าเป็นปุ่มที่สามารถคลิกได้ */
+            font-size: 18px; /* ขนาดตัวอักษรในปุ่ม */
+            margin: 20px auto; /* ระยะห่างด้านบนและด้านล่าง และจัดกลาง */
+            display: block; /* ให้ปุ่มแสดงแบบบล็อก */
+            width: 220px; /* ความกว้างของปุ่ม */
+            transition: background-color 0.3s, transform 0.2s; /* เอฟเฟกต์เมื่อเอาเมาส์ไปวาง */
+        }
+        button:hover {
+            background-color: #218838; /* สีเขียวที่เข้มขึ้นเมื่อเอาเมาส์ไปวาง */
+            transform: scale(1.05); /* ขยายปุ่มเล็กน้อยเมื่อเอาเมาส์ไปวาง */
+        }
+        label {
+            margin-right: 15px; /* เพิ่มระยะห่างระหว่างป้าย */
+        }
+        footer { /* ฟุตเตอร์ */
+            margin-top: 10px; /* ระยะห่างด้านบน */
+            padding: 5px; /* ระยะห่างภายใน */
+            background-color: #0056b3; /* สีพื้นหลังของฟุตเตอร์ */
+            color: white; /* สีตัวอักษร */
+            text-align: center; /* จัดกลางข้อความ */
+            border-radius: 0px; /* มุมที่โค้งมน */
+            border: 2px solid #003d80; /* กรอบฟุตเตอร์ */
+        }
+        .container {
+            max-width: 1200px; /* กำหนดความกว้างสูงสุดของเนื้อหา */
+            margin: 0 auto; /* จัดให้อยู่กึ่งกลางของหน้า */
+            padding: 20px; /* เพิ่มระยะห่างจากขอบของหน้าจอ */
+            background-color: #fff; /* สีพื้นหลังของคอนเทนเนอร์ */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* เงาให้ดูมีมิติ */
+            border-radius: 8px; /* มุมที่โค้งมน */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-nav">
+            <ul class="nav"> <!-- เมนูนำทาง -->
+                <li><a class="nav-link" href="/p1">หน้าแรก</a></li> <!-- ลิงก์ไปยังหน้า Home -->
+                <li><a class="nav-link" href="/checkin">บันทึกการเช็คชื่อ</a></li> <!-- ลิงก์ไปยังหน้า Check-in -->
+            </ul>
+        </div>
+        <h1>เช็คชื่อนักศึกษา</h1> <!-- หัวข้อหลัก -->
+        <form action="/save-attendance" method="POST"> <!-- ฟอร์มสำหรับส่งข้อมูลการเข้าชั้นเรียน -->
+            <table> <!-- เริ่มตาราง -->
+                <thead> <!-- หัวตาราง -->
+                    <tr>
+                        <th>ID</th> <!-- คอลัมน์ ID -->
+                        <th>First Name</th> <!-- คอลัมน์ ชื่อจริง -->
+                        <th>Last Name</th> <!-- คอลัมน์ นามสกุล -->
+                        <th>Date of Birth</th> <!-- คอลัมน์ วันเกิด -->
+                        <th>Curriculum</th> <!-- คอลัมน์ หลักสูตร -->
+                        <th>Come</th> <!-- คอลัมน์ มา -->
+                        <th>Not Coming</th> <!-- คอลัมน์ ไม่มา -->
+                    </tr>
+                </thead>
+                <tbody> <!-- เริ่มส่วนเนื้อหาของตาราง -->
+                    <% students.forEach(student => { %> <!-- ลูปผ่านรายชื่อผู้เรียน -->
+                        <tr>
+                            <td><%= student.id %></td> <!-- แสดง ID ของนักเรียน -->
+                            <td><%= student.first_name %></td> <!-- แสดงชื่อจริง -->
+                            <td><%= student.last_name %></td> <!-- แสดงนามสกุล -->
+                            <td><%= student.date_of_birth.toISOString().split('T')[0] %></td> <!-- แสดงวันเกิด -->
+                            <td><%= student.curriculum_id %></td> <!-- แสดงหลักสูตร -->
+                            <td>
+                                <label> <!-- ป้ายสำหรับเลือกการมา -->
+                                    <input type="radio" name="attendance_<%= student.id %>" value="Y"> มา
+                                </label>
+                            </td>
+                            <td>
+                                <label> <!-- ป้ายสำหรับเลือกการไม่มา -->
+                                    <input type="radio" name="attendance_<%= student.id %>" value="N"> ไม่มา
+                                </label>
+                            </td>
+                        </tr>
+                    <% }) %> <!-- สิ้นสุดการลูป -->
+                </tbody>
+            </table>
+            <button type="submit">Save Attendance</button> <!-- ปุ่มบันทึกการเข้าชั้นเรียน -->
+        </form>
+        <footer> <!-- เริ่มฟุตเตอร์ -->
+            <p>65502100009-7 © 2024</p> <!-- แสดงข้อความในฟุตเตอร์ -->
+        </footer> <!-- สิ้นสุดฟุตเตอร์ -->
+    </div>
+</body>
+</html>

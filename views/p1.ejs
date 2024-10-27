@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="th"> <!-- กำหนดภาษาเป็นภาษาไทย -->
+<head>
+  <meta charset="UTF-8"> <!-- กำหนดการเข้ารหัสเป็น UTF-8 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- ตั้งค่า viewport สำหรับการตอบสนอง -->
+  <title>เพิ่มข้อมูลนักศึกษา</title> <!-- ชื่อหน้า -->
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet"> <!-- เชื่อมฟอนต์ Kanit -->
+  <style>
+    /* ฟอนต์และสีหลัก */
+    body {
+      font-family: 'Kanit', sans-serif; /* ตั้งฟอนต์ */
+      background: linear-gradient(135deg, #e2e8f0, #ffffff); /* สีพื้นหลังแบบไล่ระดับ */
+      color: #333; /* สีข้อความ */
+      margin: 0; /* ไม่มีขอบ */
+      padding: 0; /* ไม่มีการเว้นระยะ */
+      display: flex; /* ใช้ flexbox */
+      justify-content: center; /* จัดกลางแนวนอน */
+      align-items: center; /* จัดกลางแนวตั้ง */
+      min-height: 100vh; /* ความสูงอย่างน้อย 100% ของ viewport */
+    }
+
+    .container {
+      max-width: 650px; /* กำหนดความกว้างสูงสุด */
+      padding: 30px 40px; /* การเว้นระยะภายใน */
+      background-color: #ffffff; /* สีพื้นหลัง */
+      border-radius: 12px; /* มุมโค้ง */
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* เงา */
+      transition: transform 0.3s ease; /* การเปลี่ยนแปลง */
+    }
+
+    .container:hover {
+      transform: scale(1.02); /* ขยายขนาดเมื่อวางเมาส์ */
+    }
+
+    /* สไตล์สำหรับเมนู */
+    .nav {
+      display: flex; /* ใช้ flexbox */
+      justify-content: center; /* จัดกลางแนวนอน */
+      gap: 20px; /* ช่องว่างระหว่างเมนู */
+      padding: 10px 0; /* การเว้นระยะภายใน */
+      margin-bottom: 20px; /* ระยะห่างด้านล่าง */
+      list-style-type: none; /* ไม่มีจุดในรายการ */
+    }
+
+    .nav-link {
+      text-decoration: none; /* ไม่มีขีดเส้นใต้ */
+      color: #0056b3; /* สีน้ำเงิน */
+      font-weight: 500; /* น้ำหนักฟอนต์ */
+      padding: 8px 12px; /* การเว้นระยะภายใน */
+      border-radius: 8px; /* มุมโค้ง */
+      transition: color 0.3s ease, background-color 0.3s ease; /* การเปลี่ยนแปลง */
+    }
+
+    .nav-link:hover {
+      background-color: #007bff; /* เปลี่ยนสีพื้นหลังเมื่อวางเมาส์ */
+      color: white; /* เปลี่ยนสีข้อความ */
+    }
+
+    h1 {
+      font-size: 2.2em; /* ขนาดฟอนต์หัวข้อ */
+      text-align: center; /* จัดกลางข้อความ */
+      color: #333; /* สีข้อความ */
+      margin-bottom: 25px; /* ระยะห่างด้านล่าง */
+      font-weight: 600; /* น้ำหนักฟอนต์ */
+    }
+
+    .form-label {
+      font-weight: 500; /* น้ำหนักฟอนต์ */
+      color: #555; /* สีข้อความ */
+    }
+
+    .form-control {
+      width: 100%; /* ความกว้าง 100% */
+      padding: 12px; /* การเว้นระยะภายใน */
+      margin-top: 5px; /* ระยะห่างด้านบน */
+      margin-bottom: 15px; /* ระยะห่างด้านล่าง */
+      border: 1px solid #ddd; /* ขอบ */
+      border-radius: 8px; /* มุมโค้ง */
+      font-size: 1em; /* ขนาดฟอนต์ */
+      transition: border-color 0.3s ease; /* การเปลี่ยนแปลง */
+      background-color: #f8f9fa; /* สีพื้นหลัง */
+    }
+
+    .form-control:focus {
+      border-color: #007bff; /* เปลี่ยนสีขอบเมื่อฟิลด์ถูกเลือก */
+      outline: none; /* ไม่มีเส้นขอบ */
+      box-shadow: 0 0 8px rgba(0, 123, 255, 0.2); /* เงา */
+      background-color: #ffffff; /* เปลี่ยนสีพื้นหลัง */
+    }
+
+    textarea.form-control {
+      resize: vertical; /* ขยายแนวตั้ง */
+      height: 100px; /* ความสูง */
+    }
+
+    /* ปุ่ม */
+    .btn-primary {
+      display: block; /* แสดงเป็นบล็อก */
+      width: 100%; /* ความกว้าง 100% */
+      padding: 14px; /* การเว้นระยะภายใน */
+      font-size: 1.1em; /* ขนาดฟอนต์ */
+      background-color: #28a745; /* สีพื้นหลัง */
+      color: #fff; /* สีข้อความ */
+      border: none; /* ไม่มีขอบ */
+      border-radius: 8px; /* มุมโค้ง */
+      cursor: pointer; /* เปลี่ยนเคอร์เซอร์เมื่อวางเมาส์ */
+      font-weight: 600; /* น้ำหนักฟอนต์ */
+      transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s ease; /* การเปลี่ยนแปลง */
+      box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3); /* เงา */
+    }
+
+    .btn-primary:hover {
+      background-color: #218838; /* เปลี่ยนสีพื้นหลังเมื่อวางเมาส์ */
+      box-shadow: 0 8px 16px rgba(33, 136, 56, 0.4); /* เปลี่ยนเงา */
+      transform: translateY(-2px); /* ยกขึ้นเมื่อวางเมาส์ */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- เมนูนำทาง -->
+    <ul class="nav">
+      <li><a href="/index" class="nav-link">เช็คชื่อนักศึกษา</a></li> <!-- ลิงก์ไปยังดัชนี -->
+      <li><a href="/checkin" class="nav-link">บันทึกการเช็คชื่อ</a></li> <!-- ลิงก์ไปยังหน้าตรวจสอบ -->
+    </ul>
+
+    <h1>เพิ่มข้อมูลนักศึกษา</h1> <!-- หัวข้อฟอร์ม -->
+
+    <!-- ฟอร์มเพิ่มข้อมูลนักศึกษา -->
+    <form action="/students" method="POST"> <!-- ส่งข้อมูลไปยัง /students -->
+      <label for="prefix_id" class="form-label">รหัสคำนำหน้า</label> <!-- ฟิลด์รหัสคำนำหน้า -->
+      <input type="number" class="form-control" id="prefix_id" name="prefix_id" required> <!-- อินพุตสำหรับรหัสคำนำหน้า -->
+
+      <label for="first_name" class="form-label">ชื่อ</label> <!-- ฟิลด์ชื่อ -->
+      <input type="text" class="form-control" id="first_name" name="first_name" required> <!-- อินพุตสำหรับชื่อ -->
+
+      <label for="last_name" class="form-label">นามสกุล</label> <!-- ฟิลด์นามสกุล -->
+      <input type="text" class="form-control" id="last_name" name="last_name" required> <!-- อินพุตสำหรับนามสกุล -->
+
+      <label for="date_of_birth" class="form-label">วันเกิด</label> <!-- ฟิลด์วันเกิด -->
+      <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required> <!-- อินพุตสำหรับวันเกิด -->
+
+      <label for="curriculum_id" class="form-label">รหัสหลักสูตร</label> <!-- ฟิลด์รหัสหลักสูตร -->
+      <input type="number" class="form-control" id="curriculum_id" name="curriculum_id" required> <!-- อินพุตสำหรับรหัสหลักสูตร -->
+
+      <label for="previous_school" class="form-label">โรงเรียนก่อนหน้า</label> <!-- ฟิลด์โรงเรียนก่อนหน้า -->
+      <input type="text" class="form-control" id="previous_school" name="previous_school"> <!-- อินพุตสำหรับโรงเรียนก่อนหน้า -->
+
+      <label for="address" class="form-label">ที่อยู่</label> <!-- ฟิลด์ที่อยู่ -->
+      <textarea class="form-control" id="address" name="address"></textarea> <!-- อินพุตสำหรับที่อยู่ -->
+
+      <label for="telephone" class="form-label">เบอร์โทรศัพท์</label> <!-- ฟิลด์เบอร์โทรศัพท์ -->
+      <input type="text" class="form-control" id="telephone" name="telephone"> <!-- อินพุตสำหรับเบอร์โทรศัพท์ -->
+
+      <label for="email" class="form-label">อีเมล</label> <!-- ฟิลด์อีเมล -->
+      <input type="email" class="form-control" id="email" name="email" required> <!-- อินพุตสำหรับอีเมล -->
+
+      <label for="line_id" class="form-label">Line ID</label> <!-- ฟิลด์ Line ID -->
+      <input type="text" class="form-control" id="line_id" name="line_id"> <!-- อินพุตสำหรับ Line ID -->
+
+      <button type="submit" class="btn-primary">เพิ่มนักศึกษา</button> <!-- ปุ่มส่งข้อมูล -->
+    </form>
+
+  </div>
+</body>
+</html>

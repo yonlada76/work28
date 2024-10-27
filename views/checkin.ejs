@@ -1,0 +1,149 @@
+<!DOCTYPE html> <!-- ประกาศว่าเอกสารนี้เป็น HTML5 -->
+<html lang="en"> <!-- กำหนดภาษาเป็นอังกฤษ -->
+<head>
+    <meta charset="UTF-8"> <!-- กำหนดการเข้ารหัสเป็น UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- ตั้งค่าให้เหมาะสมกับหน้าจอ -->
+    <title>Check-in List</title> <!-- ชื่อของหน้าเว็บ -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet"> <!-- นำเข้าฟอนต์ Kanit -->
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif; /* กำหนดฟอนต์สำหรับเนื้อหา */
+            background-color: #f0f8ff; /* สีพื้นหลัง */
+            margin: 0; /* ลบระยะขอบ */
+            padding: 0; /* ลบระยะใน */
+            color: #333; /* สีข้อความ */
+        }
+        /* Container สำหรับเนื้อหาและเมนูนำทาง */
+        .container {
+            max-width: 1200px; /* ความกว้างสูงสุดของคอนเทนเนอร์ */
+            margin: 0 auto; /* จัดกลางในแนวนอน */
+            padding: 20px; /* ระยะภายใน */
+            background-color: #fff; /* สีพื้นหลังของคอนเทนเนอร์ */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* เงา */
+            border-radius: 8px; /* มุมที่โค้งมน */
+        }
+        /* ส่วนหัวและเมนูนำทาง */
+        .header-nav {
+            background-color: #0056b3; /* สีพื้นหลังของแถบเมนู */
+            color: white; /* สีข้อความในแถบเมนู */
+            padding: 10px; /* ระยะในของแถบเมนู */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* เงา */
+            border-radius: 8px 8px 0 0; /* มุมโค้งของแถบเมนู */
+        }
+        .header-nav .nav {
+            display: flex; /* ใช้ Flexbox สำหรับจัดเรียงลิงก์ */
+            justify-content: center; /* จัดกลางลิงก์ */
+            list-style: none; /* ไม่แสดงสัญลักษณ์ลิสต์ */
+            padding: 0; /* ลบระยะใน */
+            margin: 0; /* ลบระยะนอก */
+        }
+        /* ลิงก์ในแถบนำทาง */
+        .header-nav .nav-link {
+            margin: 0 15px; /* ระยะห่างระหว่างลิงก์ */
+            text-decoration: none; /* ไม่มีเส้นใต้ */
+            color: white; /* สีข้อความลิงก์ */
+            font-weight: 500; /* น้ำหนักตัวอักษร */
+            font-size: 1.1em; /* ขนาดตัวอักษร */
+            padding: 10px 15px; /* ระยะห่างภายในลิงก์ */
+            border-radius: 4px; /* มุมที่โค้งมน */
+            transition: background-color 0.3s, transform 0.2s; /* เอฟเฟกต์เมื่อเปลี่ยนสี */
+        }
+        /* การโต้ตอบเมื่อลากเมาส์ผ่าน */
+        .header-nav .nav-link:hover {
+            background-color: #003d80; /* เปลี่ยนสีพื้นหลังเมื่อเอาเมาส์ไปวาง */
+            color: #f0f8ff; /* เปลี่ยนสีข้อความเมื่อเอาเมาส์ไปวาง */
+            transform: translateY(-2px); /* ยกขึ้นเล็กน้อยเมื่อเอาเมาส์ไปวาง */
+        }
+        /* หัวข้อหลัก */
+        h1 {
+            text-align: center; /* จัดกลางข้อความ */
+            color: #0056b3; /* สีข้อความ */
+            margin-bottom: 20px; /* ระยะห่างด้านล่าง */
+            font-size: 2.5em; /* ขนาดตัวอักษร */
+            font-weight: 700; /* น้ำหนักตัวอักษร */
+        }
+        /* การจัดการตาราง */
+        table {
+            width: 100%; /* ให้ตารางเต็มความกว้าง */
+            border-collapse: collapse; /* รวมเส้นขอบ */
+            margin: 20px 0; /* ระยะห่างด้านบนและล่าง */
+            background-color: #fff; /* สีพื้นหลังของตาราง */
+            border-radius: 8px; /* มุมที่โค้งมน */
+            overflow: hidden; /* ป้องกันการแสดงผลที่ไม่สวยงาม */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* เงาให้ดูมีมิติ */
+        }
+        th, td {
+            padding: 15px; /* ระยะห่างภายในเซลล์ */
+            text-align: left; /* จัดข้อความทางซ้าย */
+            border-bottom: 1px solid #ddd; /* เส้นขอบด้านล่างเซลล์ */
+            transition: background-color 0.3s; /* เอฟเฟกต์เมื่อเปลี่ยนสีพื้นหลัง */
+        }
+        th {
+            background-color: #007bff; /* สีพื้นหลังของหัวตาราง */
+            color: white; /* สีข้อความในหัวตาราง */
+            font-size: 1.2em; /* ขนาดตัวอักษรที่ใหญ่ขึ้นสำหรับหัวตาราง */
+        }
+        tr:hover {
+            background-color: #f1f1f1; /* สีพื้นหลังที่เปลี่ยนเมื่อเมาส์อยู่เหนือแถว */
+        }
+        /* สถานะของนักเรียน */
+        .status-present {
+            color: green; /* สีเขียวสำหรับสถานะที่มา */
+            font-weight: bold; /* น้ำหนักตัวอักษรหนา */
+        }
+        .status-absent {
+            color: red; /* สีแดงสำหรับสถานะที่ไม่มา */
+            font-weight: bold; /* น้ำหนักตัวอักษรหนา */
+        }
+        /* ฟุตเตอร์ */
+        footer {
+            margin-top: 10px; /* ระยะห่างด้านบน */
+            padding: 5px; /* ระยะห่างภายใน */
+            background-color: #0056b3; /* สีพื้นหลังของฟุตเตอร์ */
+            color: white; /* สีตัวอักษรในฟุตเตอร์ */
+            text-align: center; /* จัดกลางข้อความ */
+            border-radius: 0px; /* ไม่มีมุมโค้ง */
+            border: 2px solid #003d80; /* เส้นขอบของฟุตเตอร์ */
+        }
+    </style>
+</head>
+<body>
+    <div class="container"> <!-- เริ่มคอนเทนเนอร์สำหรับเนื้อหา -->
+        <div class="header-nav"> <!-- ส่วนหัวสำหรับเมนูนำทาง -->
+            <ul class="nav"> <!-- เริ่มลิสต์ของลิงก์ในเมนู -->
+              <a href="/p1" class="nav-link">หน้าแรก</a> <!-- ลิงก์ไปยังหน้าแรก -->
+              <a href="/index" class="nav-link">เช็คชื่อนักศึกษา</a> <!-- ลิงก์ไปยังหน้าเช็คชื่อนักศึกษา -->
+            </ul>
+        </div>
+
+        <h1>บันทึกการเช็คชื่อ</h1> <!-- หัวข้อหลักของหน้า -->
+        <table> <!-- เริ่มตาราง -->
+            <thead> <!-- หัวตาราง -->
+                <tr>
+                    <th>Student ID</th> <!-- คอลัมน์รหัสนักเรียน -->
+                    <th>First Name</th> <!-- คอลัมน์ชื่อจริง -->
+                    <th>Last Name</th> <!-- คอลัมน์นามสกุล -->
+                    <th>Active Date</th> <!-- คอลัมน์วันที่เช็คชื่อ -->
+                    <th>Status</th> <!-- คอลัมน์สถานะ -->
+                </tr>
+            </thead>
+            <tbody> <!-- เริ่มส่วนเนื้อหาของตาราง -->
+                <% studentLists.forEach(item => { %> <!-- ลูปผ่านรายชื่อผู้เรียน -->
+                    <tr>
+                        <td><%= item.student_id %></td> <!-- แสดงรหัสนักเรียน -->
+                        <td><%= item.first_name %></td> <!-- แสดงชื่อจริง -->
+                        <td><%= item.last_name %></td> <!-- แสดงนามสกุล -->
+                        <td><%= item.active_date.toISOString().split('T')[0] %></td> <!-- แสดงวันที่เช็คชื่อ -->
+                        <td class="<%= item.status === 'Y' ? 'status-present' : 'status-absent' %>"> <!-- ตรวจสอบสถานะและกำหนดคลาส -->
+                            <%= item.status === 'Y' ? 'Present' : 'Absent' %> <!-- แสดงสถานะการเข้าชั้นเรียน -->
+                        </td>
+                    </tr>
+                <% }) %> <!-- สิ้นสุดการลูป -->
+            </tbody>
+        </table> <!-- สิ้นสุดตาราง -->
+        <footer> <!-- เริ่มฟุตเตอร์ -->
+            <p>65502100009-7 © 2024</p> <!-- ข้อความในฟุตเตอร์ -->
+        </footer> <!-- สิ้นสุดฟุตเตอร์ -->
+    </div> <!-- สิ้นสุดคอนเทนเนอร์ -->
+</body>
+</html>
