@@ -124,13 +124,13 @@
                     <th>First Name</th> <!-- คอลัมน์ชื่อจริง -->
                     <th>Last Name</th> <!-- คอลัมน์นามสกุล -->
                     <th>Active Date</th> <!-- คอลัมน์วันที่เช็คชื่อ -->
-                    <th>Status</th> <!-- คอลัมน์สถานะ -->
+                   
                 </tr>
             </thead>
             <tbody> <!-- เริ่มส่วนเนื้อหาของตาราง -->
                 <% studentLists.forEach(item => { %> <!-- ลูปผ่านรายชื่อผู้เรียน -->
                     <tr>
-                        <td><%= item.student_id %></td> <!-- แสดงรหัสนักเรียน -->
+                       
                         <td><%= item.first_name %></td> <!-- แสดงชื่อจริง -->
                         <td><%= item.last_name %></td> <!-- แสดงนามสกุล -->
                         <td><%= item.active_date.toISOString().split('T')[0] %></td> <!-- แสดงวันที่เช็คชื่อ -->

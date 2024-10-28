@@ -83,7 +83,12 @@ app.get('/p1', async (req, res) => { // สร้าง route สำหรับ
 // Route สำหรับหน้า index
 app.get('/index', async (req, res) => { // สร้าง route สำหรับหน้า index
     try {
-        const result = await pool.query('SELECT * FROM student'); // Query ข้อมูลนักเรียนจากตาราง student
+        const result = await pool.query(`
+            SELECT student.id, student.first_name, student.last_name, student.date_of_birth,
+                   curriculum.short_name_en AS curriculum_short
+            FROM student
+            JOIN curriculum ON student.curriculum_id = curriculum.id
+        `); // Query ข้อมูลนักเรียนพร้อมกับชื่อย่อของหลักสูตร
         const students = result.rows; // ดึงข้อมูลที่ query มาเก็บในตัวแปร students
         res.render('index', { students }); // ส่งตัวแปร students ไปที่หน้า index.ejs
     } catch (err) {
@@ -114,6 +119,7 @@ app.post('/students', async (req, res) => { // สร้าง route สำห�
 });
 
 // Route เพื่อบันทึกการเข้าชั้นเรียน
+// Route เพื่อบันทึกการเข้าชั้นเรียน
 app.post('/save-attendance', async (req, res) => { // สร้าง route สำหรับบันทึกการเข้าชั้นเรียน
     const attendanceData = req.body; // รับข้อมูลจากฟอร์ม
 
@@ -129,11 +135,26 @@ app.post('/save-attendance', async (req, res) => { // สร้าง route ส�
                 const studentId = key.split('_')[1]; // แยก student ID
                 const status = attendanceData[key]; // ได้สถานะที่ส่งมา (Y หรือ N)
 
-                // สร้างคำสั่ง SQL สำหรับบันทึกข้อมูลการเข้าชั้นเรียน
-                queries.push(pool.query(`
-                    INSERT INTO student_list (section_id, student_id, active_date, status)
-                    VALUES ($1, $2, $3, $4)
-                `, [sectionId, studentId, activeDate, status])); // ใส่ค่าลงในคำสั่ง SQL
+                // ตรวจสอบว่ามีข้อมูลใน student_list อยู่แล้วหรือไม่
+                const existingResult = await pool.query(`
+                    SELECT * FROM student_list 
+                    WHERE section_id = $1 AND student_id = $2 AND active_date = $3
+                `, [sectionId, studentId, activeDate]);
+
+                if (existingResult.rows.length > 0) {
+                    // ถ้ามีข้อมูลอยู่แล้วให้ทำการ UPDATE
+                    queries.push(pool.query(`
+                        UPDATE student_list 
+                        SET status = $1 
+                        WHERE section_id = $2 AND student_id = $3 AND active_date = $4
+                    `, [status, sectionId, studentId, activeDate]));
+                } else {
+                    // ถ้ายังไม่มีข้อมูลให้ทำการ INSERT
+                    queries.push(pool.query(`
+                        INSERT INTO student_list (section_id, student_id, active_date, status)
+                        VALUES ($1, $2, $3, $4)
+                    `, [sectionId, studentId, activeDate, status]));
+                }
             }
         }
 
@@ -144,6 +165,7 @@ app.post('/save-attendance', async (req, res) => { // สร้าง route ส�
         res.status(500).send('Error saving attendance.'); // ส่งสถานะ 500 ถ้ามีข้อผิดพลาด
     }
 });
+
 
 // เริ่มต้น server
 app.listen(port, () => { // เริ่มต้น server

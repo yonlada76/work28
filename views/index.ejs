@@ -138,7 +138,7 @@
                             <td><%= student.first_name %></td> <!-- แสดงชื่อจริง -->
                             <td><%= student.last_name %></td> <!-- แสดงนามสกุล -->
                             <td><%= student.date_of_birth.toISOString().split('T')[0] %></td> <!-- แสดงวันเกิด -->
-                            <td><%= student.curriculum_id %></td> <!-- แสดงหลักสูตร -->
+                            <td><%= student.curriculum_short %></td> <!-- แสดงชื่อย่อหลักสูตร CS หรือ IT -->
                             <td>
                                 <label> <!-- ป้ายสำหรับเลือกการมา -->
                                     <input type="radio" name="attendance_<%= student.id %>" value="Y"> มา
